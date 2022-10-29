@@ -1,4 +1,3 @@
-
 # Typing Test @ AOEU
 
 Link: [https://typing-speed-test.aoeu.eu/](https://typing-speed-test.aoeu.eu/)

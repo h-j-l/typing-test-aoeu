@@ -6,8 +6,9 @@ Library             RPA.FileSystem
 
 
 *** Variables ***
-${SCORE_FILE}       ${OUTPUT_DIR}${/}score.txt
-${URL}              https://typing-speed-test.aoeu.eu/
+${SCORE}                ${OUTPUT_DIR}${/}score.txt
+${SCORE_SCREENSHOT}     ${OUTPUT_DIR}${/}score.png
+${URL}                  https://typing-speed-test.aoeu.eu/
 
 
 *** Tasks ***
@@ -21,8 +22,7 @@ Typing test
 
 *** Keywords ***
 Open the test in Browser
-    Open Available Browser    ${URL}
-    Maximize Browser Window
+    Open Headless Chrome Browser    ${URL}
 
 Close cookie popup
     Click Button When Visible    css:button[mode="primary"][size="large"]
@@ -30,7 +30,7 @@ Close cookie popup
 Type the words
     Wait For Condition    return document.readyState == "complete"
     ${currentWord}=    Get Text    id:currentword
-    @{nextWords}=    Get WebElements    css:span[class="nextword"]
+    @{nextWords}=    Get WebElements    class:nextword
     Input Text    id:input    ${currentWord}${SPACE}
     FOR    ${nextWord}    IN    @{nextWords}
         ${word}=    Get Text    ${nextWord}
@@ -39,8 +39,9 @@ Type the words
 
 Save the score
     Wait Until Element Is Visible    id:result
-    ${score}=    Get Text    id:result
-    Create File    ${SCORE_FILE}    ${score}
+    ${result}=    Get Text    id:result
+    Create File    ${SCORE}    ${result}    overwrite=True
+    Screenshot    id:border    ${SCORE_SCREENSHOT}
 
 End test
     Close Browser
